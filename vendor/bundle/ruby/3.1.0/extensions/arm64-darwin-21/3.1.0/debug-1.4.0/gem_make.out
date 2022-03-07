@@ -1,0 +1,16 @@
+current directory: /Users/joelazemar/WorkSpace/Rails/Rails7/demo/vendor/bundle/ruby/3.1.0/gems/debug-1.4.0/ext/debug
+/Users/joelazemar/.asdf/installs/ruby/3.1.1/bin/ruby -I /Users/joelazemar/.asdf/installs/ruby/3.1.1/lib/ruby/site_ruby/3.1.0 -r ./siteconf20220307-79065-guyqj8.rb extconf.rb
+creating Makefile
+
+current directory: /Users/joelazemar/WorkSpace/Rails/Rails7/demo/vendor/bundle/ruby/3.1.0/gems/debug-1.4.0/ext/debug
+make DESTDIR\= clean
+
+current directory: /Users/joelazemar/WorkSpace/Rails/Rails7/demo/vendor/bundle/ruby/3.1.0/gems/debug-1.4.0/ext/debug
+make DESTDIR\=
+compiling debug.c
+compiling iseq_collector.c
+linking shared-object debug/debug.bundle
+
+current directory: /Users/joelazemar/WorkSpace/Rails/Rails7/demo/vendor/bundle/ruby/3.1.0/gems/debug-1.4.0/ext/debug
+make DESTDIR\= install
+/opt/homebrew/bin/ginstall -c -m 0755 debug.bundle ./.gem.20220307-79065-m60y06/debug
