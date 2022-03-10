@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  content: MyText
+  user: one
+  signed_at: 2022-03-10 14:29:15
+  approved_at: 2022-03-10 14:29:15
+  activated_at: 2022-03-10 14:29:15
+
+two:
+  title: MyString
+  content: MyText
+  user: two
+  signed_at: 2022-03-10 14:29:15
+  approved_at: 2022-03-10 14:29:15
+  activated_at: 2022-03-10 14:29:15

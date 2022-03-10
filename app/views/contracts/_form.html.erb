@@ -1,0 +1,47 @@
+<%= form_with(model: contract) do |form| %>
+  <% if contract.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(contract.errors.count, "error") %> prohibited this contract from being saved:</h2>
+
+      <ul>
+        <% contract.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :title, style: "display: block" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :content, style: "display: block" %>
+    <%= form.text_area :content %>
+  </div>
+
+  <div>
+    <%= form.label :user_id, style: "display: block" %>
+    <%= form.text_field :user_id %>
+  </div>
+
+  <div>
+    <%= form.label :signed_at, style: "display: block" %>
+    <%= form.datetime_field :signed_at %>
+  </div>
+
+  <div>
+    <%= form.label :approved_at, style: "display: block" %>
+    <%= form.datetime_field :approved_at %>
+  </div>
+
+  <div>
+    <%= form.label :activated_at, style: "display: block" %>
+    <%= form.datetime_field :activated_at %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

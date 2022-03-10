@@ -4,4 +4,6 @@ class User < ApplicationRecord
   attribute :email, :string, default: -> { FFaker::Internet.email }
   attribute :birthday, :datetime, default: -> { (10..99).to_a.sample.years.ago }
   attribute :bio, :text, default: -> { FFaker::Lorem.paragraph }
+
+  has_one :contract, dependent: :destroy
 end

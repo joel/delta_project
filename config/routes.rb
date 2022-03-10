@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :contracts
   resources :users
   resources :posts do
     resources :comments
