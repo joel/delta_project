@@ -2,8 +2,8 @@
 
 one:
   post: one
-  content: MyText
+  content: <%= FFaker::Lorem.paragraph %>
 
 two:
   post: two
-  content: MyText
+  content: <%= FFaker::Lorem.paragraph %>

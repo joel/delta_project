@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: <%= FFaker::Conference.name %>
+  content: <%= FFaker::Lorem.paragraph %>
+  user: one
+  signed_at: <%= FFaker::Time.datetime %>
+  approved_at: <%= FFaker::Time.datetime %>
+  activated_at: <%= FFaker::Time.datetime %>
