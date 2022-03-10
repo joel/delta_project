@@ -1,1 +1,6 @@
-.env
+.git
+.gitignore
+log/
+tmp/
+dockerfiles/*
+.env*
