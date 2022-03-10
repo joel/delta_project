@@ -170,7 +170,7 @@ jobs:
             --env DB_HOST=${{ env.SERVICE_NAME }}-db \
             --env DB_PORT=${{ env.DB_PORT }} \
             --env DB_PASSWORD=${{ env.DB_PASSWORD }} \
-            --env DB_USER=${{ env.DB_PASSWORD }} \
+            --env DB_USER=${{ env.DB_USER }} \
             --env RAILS_ENV=test \
             --network=${{ env.SERVICE_NAME }}-bridge-docker-network \
             ${{ env.SERVICE_NAME }}/app-ci:${{ env.VERSION }} /bin/bash -c "bin/rails db:prepare"
@@ -182,7 +182,7 @@ jobs:
             --env DB_HOST=${{ env.SERVICE_NAME }}-db \
             --env DB_PORT=${{ env.DB_PORT }} \
             --env DB_PASSWORD=${{ env.DB_PASSWORD }} \
-            --env DB_USER=${{ env.DB_PASSWORD }} \
+            --env DB_USER=${{ env.DB_USER }} \
             --env RAILS_ENV=test \
             --network=${{ env.SERVICE_NAME }}-bridge-docker-network \
             ${{ env.SERVICE_NAME }}/app-ci:${{ env.VERSION }} /bin/bash -c "bin/rails test"
