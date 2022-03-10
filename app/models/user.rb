@@ -6,4 +6,8 @@ class User < ApplicationRecord
   attribute :bio, :text, default: -> { FFaker::Lorem.paragraph }
 
   has_one :contract, dependent: :destroy
+
+  def name
+    "#{self.first_name} #{self.last_name}"
+  end
 end

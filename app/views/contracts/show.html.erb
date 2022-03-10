@@ -3,8 +3,8 @@
 <%= render @contract %>
 
 <div>
-  <%= link_to "Edit this contract", edit_contract_path(@contract) %> |
-  <%= link_to "Back to contracts", contracts_path %>
+  <%= link_to "Edit this contract", edit_user_contract_path(@user, @contract) %> |
+  <%= link_to "Back to user", user_path(@user) %>
 
-  <%= button_to "Destroy this contract", @contract, method: :delete %>
+  <%= button_to "Destroy this contract", user_contract_path(@user, @contract), method: :delete %>
 </div>

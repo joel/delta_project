@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
-  resources :contracts
-  resources :users
+
+  resources :users do
+    resources :contracts, except: [:index]
+  end
+
   resources :posts do
     resources :comments
   end

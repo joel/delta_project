@@ -1,10 +1,6 @@
 class ContractsController < ApplicationController
+  before_action :set_user
   before_action :set_contract, only: %i[ show edit update destroy ]
-
-  # GET /contracts or /contracts.json
-  def index
-    @contracts = Contract.all
-  end
 
   # GET /contracts/1 or /contracts/1.json
   def show
@@ -12,7 +8,7 @@ class ContractsController < ApplicationController
 
   # GET /contracts/new
   def new
-    @contract = Contract.new
+    @contract = @user.build_contract
   end
 
   # GET /contracts/1/edit
@@ -21,11 +17,11 @@ class ContractsController < ApplicationController
 
   # POST /contracts or /contracts.json
   def create
-    @contract = Contract.new(contract_params)
+    @contract = @user.build_contract(contract_params)
 
     respond_to do |format|
       if @contract.save
-        format.html { redirect_to contract_url(@contract), notice: "Contract was successfully created." }
+        format.html { redirect_to user_contract_url(@user, @contract), notice: "Contract was successfully created." }
         format.json { render :show, status: :created, location: @contract }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +34,7 @@ class ContractsController < ApplicationController
   def update
     respond_to do |format|
       if @contract.update(contract_params)
-        format.html { redirect_to contract_url(@contract), notice: "Contract was successfully updated." }
+        format.html { redirect_to user_contract_url(@user, @contract), notice: "Contract was successfully updated." }
         format.json { render :show, status: :ok, location: @contract }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -52,7 +48,7 @@ class ContractsController < ApplicationController
     @contract.destroy
 
     respond_to do |format|
-      format.html { redirect_to contracts_url, notice: "Contract was successfully destroyed." }
+      format.html { redirect_to user_url(@user), notice: "Contract was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -60,11 +56,15 @@ class ContractsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_contract
-      @contract = Contract.find(params[:id])
+      @contract = @user.contract
+    end
+
+    def set_user
+      @user = User.find(params[:user_id])
     end
 
     # Only allow a list of trusted parameters through.
     def contract_params
-      params.require(:contract).permit(:title, :content, :user_id, :signed_at, :approved_at, :activated_at)
+      params.require(:contract).permit(:title, :content)
     end
 end
