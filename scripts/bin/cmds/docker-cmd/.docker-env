@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+source "${SCRIPTS_ROOT_PATH}/bin/cmds/docker-cmd/.docker-env"

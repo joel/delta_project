@@ -1,0 +1,158 @@
+#!/usr/bin/env bash
+
+source ${SCRIPTS_ROOT_PATH}/bin/.env/bash/.include-script-definitions
+source ${SCRIPTS_ROOT_PATH}/bin/cmds/db-cmd/.db-env
+
+help() {
+  echo "script: [${script_relative_path}], service: [${service_name}]"
+  echo
+  echo "format:"
+  echo "  ${APP_NAME} docker-run [environment] [options] [command]"
+  echo
+  echo "environments:"
+  echo "  dev or development              [optional] (default)"
+  echo "  test                                                "
+  echo "  prod or production                                  "
+  echo "  acceptance or acceptance_test                       "
+  echo "  ci                                                  "
+  echo "  demo                                                "
+  echo
+  echo "options:"
+  echo "  --interactive                         Rebuild if the image already exists."
+  echo
+  echo "examples:"
+  echo "  ${APP_NAME} docker-exec server development -c '${RAKE_COMMAND} db:migrate'"
+  echo "  ${APP_NAME} docker-exec server --interactive demo -c '${RAILS_COMMAND} console'"
+  echo "  ${APP_NAME} docker-exec server -i demo -c '${RAKE_COMMAND} console'"
+  echo "  ${APP_NAME} docker-exec server demo -c '${RAKE_COMMAND} -T db'"
+}
+
+arguments=($@)
+
+last_option=${arguments[@]:~0}
+if [[ ${last_option} == "--help" ]]; then
+  help_option="--help"
+fi
+
+if [[ -f ${HOME}/.config/${APP_NAME}/.${APP_NAME}-debug-mode ]]
+then
+  echo "arguments: [${arguments[@]}]"
+  echo "last_option: [${last_option}]"
+  echo
+fi
+
+source ${SCRIPTS_ROOT_PATH}/bin/includes/help-include
+
+arguments=($@)
+
+services=("server" "db")
+options=("--interactive" "--it" "-it" "-i")
+
+for index in "${!arguments[@]}"
+do
+  if [[ "${arguments[${index}]}" == "-c" ]]
+  then
+    command_index=${index}
+    break
+  fi
+done
+
+if [[ -z ${command_index} ]]
+then
+  echo "missing [-c] option"
+  echo "run [${APP_NAME} docker-exec --help]"
+  exit 1
+fi
+
+command_index=$( expr ${command_index} + 1 )
+
+if [[ -f ${HOME}/.config/${APP_NAME}/.${APP_NAME}-debug-mode ]]
+then
+  echo "command index: [${command_index}]"
+  echo "command: [${arguments[@]:${command_index}}]"
+fi
+
+command="${arguments[@]:${command_index}}"
+
+for argument in "${arguments[@]}"
+do
+  echo "argument: [${argument}]"
+
+  if [[ "${argument}" == "-c" ]]
+  then
+    break
+  fi
+
+  if [[ " ${services[@]} " =~ " ${argument} " ]]
+  then
+    service="${argument}"
+  fi
+  if [[ " ${options[@]} " =~ " ${argument} " ]]
+  then
+    option="${argument}"
+  fi
+  if [[ " ${environments[@]} " =~ " ${argument} " ]]
+  then
+    environment="${argument}"
+  fi
+done
+
+if [[ ! " ${services[@]} " =~ " ${service} " ]]
+then
+  echo "Service [${service}] is not supported, please refer to the help"
+  echo "${APP_NAME} docker-exec --list"
+fi
+
+environment="${environment:-dev}"
+
+source ${SCRIPTS_ROOT_PATH}/bin/includes/environments-helper
+
+option="${option:---none}"
+
+case "${option}" in
+  "--it"|"-it"|"-i")
+    option=("--interactive")
+  ;;
+esac
+
+if [[ -f ${HOME}/.config/${APP_NAME}/.${APP_NAME}-debug-mode ]]
+then
+  echo "service: [${service}]"
+  echo "option: [${option}]"
+  echo "env_long_name: [${env_long_name}]"
+  echo "env_short_name: [${env_short_name}]"
+  echo "environment: [${environment}]"
+  echo "command: [${command}]"
+fi
+
+check_os
+
+grep_command=`grep_binary`
+
+container_name=${APP_NAME}-${service}
+docker ps --format "{{.Names}}" | ${grep_command} -Po "^${container_name}$" 1> /dev/null
+if [[ $? = 1 ]]
+then
+  echo "container carry environment in the name"
+  container_name+="-${env_short_name}"
+fi
+
+docker ps --format "{{.Names}}" | ${grep_command} -Po "^${container_name}$" 1> /dev/null
+if [[ $? = 1 ]]
+then
+  echo "Service [${service}] [${env_short_name}] not started!"
+  echo "Try [${APP_NAME} ${service} ${env_short_name} start]"
+  exit 1
+fi
+
+if [[ -f ${HOME}/.config/${APP_NAME}/.${APP_NAME}-debug-mode ]]
+then
+  echo "container: [${container_name}]"
+fi
+
+if [[ ${option} == "--interactive" ]]
+then
+  eval "docker exec -it ${container_name} ${interpreter} -c '${command}'"
+else
+  eval "docker exec -t ${container_name} ${interpreter} -c '${command}'"
+fi
