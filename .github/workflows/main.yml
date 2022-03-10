@@ -1,6 +1,6 @@
 name: Docker Cached Image
 
-on: [push,pull_request]
+on: [push]
 
 env:
   SERVICE_NAME: delta_project
