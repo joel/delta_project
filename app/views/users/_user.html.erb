@@ -1,0 +1,28 @@
+<div id="<%= dom_id user %>">
+  <p>
+    <strong>First name:</strong>
+    <%= user.first_name %>
+  </p>
+
+  <p>
+    <strong>Last name:</strong>
+    <%= user.last_name %>
+  </p>
+
+  <p>
+    <strong>Email:</strong>
+    <%= user.email %>
+  </p>
+
+  <p>
+    <strong>Bio:</strong>
+    <%= user.bio %>
+  </p>
+
+  <p>
+    <strong>Birthday:</strong>
+    <%= time_tag user.birthday %><br>
+    - <%= time_ago_in_words user.birthday %>
+  </p>
+
+</div>
