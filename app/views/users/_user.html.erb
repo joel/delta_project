@@ -27,7 +27,8 @@
 
   <p>
     <strong>Contract:</strong>
-    <%= contract_link(user) %>
+    <%= contract_link(user) %><br>
+    Status: <%= contract_icon(user.contract) %> <%= contract_status(user.contract) %>
   </p>
 
 </div>
