@@ -1,7 +1,7 @@
-class Api::Contracts::ApprovalController < Api::BaseController
+class Api::Contracts::ApprovalsController < Api::BaseController
   before_action :set_contract
 
-  def create
+  def update
     @contract.update(approved_at: Time.now)
     render json: @contract
   end

@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :contracts do
-      get 'approval/create'
-      get 'approval/destroy'
+      resources :approvals, only: [:update, :destroy]
     end
   end
 
