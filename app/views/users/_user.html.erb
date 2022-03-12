@@ -25,10 +25,10 @@
     - <%= time_ago_in_words user.birthday %>
   </p>
 
-  <p>
-    <strong>Contract:</strong>
-    <%= contract_link(user) %><br>
-    Status: <%= contract_icon(user.contract) %> <%= contract_status(user.contract) %>
-  </p>
+  <% if user.contract %>
+    <%= render "contracts/contract", contract: user.contract %>
+  <% else %>
+    <%= link_to("New contract", new_user_contract_url(user)) %>
+  <% end %>
 
 </div>

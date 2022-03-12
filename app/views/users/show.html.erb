@@ -1,6 +1,10 @@
+<%= turbo_stream_from @user %>
+
 <p style="color: green"><%= notice %></p>
 
-<%= render @user %>
+<% benchmark "Rendering user partial" do %>
+  <%= render @user %>
+<% end %>
 
 <div>
   <%= link_to "Edit this user", edit_user_path(@user) %> |

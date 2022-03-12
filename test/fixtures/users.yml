@@ -20,3 +20,10 @@ john:
   email: <%= FFaker::Internet.email %>
   bio: <%= FFaker::Lorem.paragraph %>
   birthday: <%= FFaker::Time.date %>
+
+user_without_contract:
+  first_name: <%= FFaker::Name.first_name %>
+  last_name: <%= FFaker::Name.first_name %>
+  email: <%= FFaker::Internet.email %>
+  bio: <%= FFaker::Lorem.paragraph %>
+  birthday: <%= FFaker::Time.date %>

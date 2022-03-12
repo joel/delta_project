@@ -7,7 +7,7 @@ class ContractsTest < ApplicationSystemTestCase
   end
 
   test "should create contract" do
-    visit user_url(users(:two))
+    visit user_url(users(:user_without_contract))
     click_on "New contract"
 
     fill_in "Content", with: @contract.content
