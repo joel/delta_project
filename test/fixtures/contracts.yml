@@ -7,3 +7,14 @@ one:
   signed_at: <%= FFaker::Time.datetime %>
   approved_at: <%= FFaker::Time.datetime %>
   activated_at: <%= FFaker::Time.datetime %>
+
+approved:
+  title: <%= FFaker::Conference.name %>
+  content: <%= FFaker::Lorem.paragraph %>
+  user: john
+  approved_at: <%= FFaker::Time.datetime %>
+
+pending_approval:
+  title: <%= FFaker::Conference.name %>
+  content: <%= FFaker::Lorem.paragraph %>
+  user: john

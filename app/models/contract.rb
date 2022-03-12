@@ -1,4 +1,6 @@
 class Contract < ApplicationRecord
+  include ActiveModel::Serializers::JSON
+
   attribute :title, :string, default: -> { FFaker::Conference.name }
   attribute :content, :text, default: -> { FFaker::Lorem.paragraph }
 
