@@ -1,5 +1,9 @@
-class Api::BaseController < ApplicationController
-  protect_from_forgery unless: -> { request.format.json? }
+# frozen_string_literal: true
 
-  # respond_to :json
+module Api
+  class BaseController < ApplicationController
+    protect_from_forgery unless: -> { request.format.json? }
+
+    # respond_to :json
+  end
 end

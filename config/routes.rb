@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   namespace :api do
     namespace :contracts do
-      resources :approvals, only: [:update, :destroy]
+      resources :approvals, only: %i[update destroy]
     end
   end
 

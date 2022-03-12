@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class CommentsMailerTest < ActionMailer::TestCase
@@ -8,5 +10,4 @@ class CommentsMailerTest < ActionMailer::TestCase
     assert_equal ["from@example.com"], mail.from
     assert_match "You got a new comment on", mail.body.encoded
   end
-
 end

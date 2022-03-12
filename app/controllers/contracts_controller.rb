@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 class ContractsController < ApplicationController
   before_action :set_user
-  before_action :set_contract, only: %i[ show edit update destroy ]
+  before_action :set_contract, only: %i[show edit update destroy]
 
   # GET /contracts/1 or /contracts/1.json
-  def show
-  end
+  def show; end
 
   # GET /contracts/new
   def new
@@ -12,8 +13,7 @@ class ContractsController < ApplicationController
   end
 
   # GET /contracts/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /contracts or /contracts.json
   def create
@@ -54,17 +54,18 @@ class ContractsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_contract
-      @contract = @user.contract
-    end
 
-    def set_user
-      @user = User.find(params[:user_id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_contract
+    @contract = @user.contract
+  end
 
-    # Only allow a list of trusted parameters through.
-    def contract_params
-      params.require(:contract).permit(:title, :content)
-    end
+  def set_user
+    @user = User.find(params[:user_id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def contract_params
+    params.require(:contract).permit(:title, :content)
+  end
 end

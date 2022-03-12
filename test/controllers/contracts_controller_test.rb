@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class ContractsControllerTest < ActionDispatch::IntegrationTest
@@ -30,7 +32,8 @@ class ContractsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update contract" do
-    patch user_contract_url(@user, @contract), params: { contract: { content: @contract.content, title: @contract.title } }
+    patch user_contract_url(@user, @contract),
+          params: { contract: { content: @contract.content, title: @contract.title } }
     assert_redirected_to user_contract_url(@user, @contract)
   end
 

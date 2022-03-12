@@ -1,19 +1,25 @@
-class Api::Contracts::ApprovalsController < Api::BaseController
-  before_action :set_contract
+# frozen_string_literal: true
 
-  def update
-    @contract.update(approved_at: Time.now)
-    render json: @contract
-  end
+module Api
+  module Contracts
+    class ApprovalsController < Api::BaseController
+      before_action :set_contract
 
-  def destroy
-    @contract.update(approved_at: nil)
-    render json: @contract
-  end
+      def update
+        @contract.update(approved_at: Time.now)
+        render json: @contract
+      end
 
-  private
+      def destroy
+        @contract.update(approved_at: nil)
+        render json: @contract
+      end
 
-  def set_contract
-    @contract = Contract.find(params[:id])
+      private
+
+      def set_contract
+        @contract = Contract.find(params[:id])
+      end
+    end
   end
 end

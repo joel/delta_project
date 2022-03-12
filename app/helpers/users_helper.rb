@@ -1,5 +1,6 @@
-module UsersHelper
+# frozen_string_literal: true
 
+module UsersHelper
   def contract_status(contract)
     return "N/A" unless contract
 
