@@ -1,23 +1,14 @@
-name: Docker Cached Image
+name: Tests
 
 on: [push]
 
 env:
-  SERVICE_NAME: delta_project
-  IMAGE_CACHE_DIR: /tmp/cache/docker-image
-  IMAGE_CACHE_KEY: docker-cache-image
-  DB_PASSWORD: db_password
-  DB_DATA_PATH: /var/lib/postgresql/data
-  DB_USER: postgres
-  DB_PORT: 5432
-  DB_VERSION: latest
-  RUBY_VERSION: 3.1.1
-  VERSION: latest
-  COMPOSE_WAIT_VER: 2.9.0
+  CI: true
+  RAILS_ENV: test
 
 jobs:
 
-  image-build-and-cache:
+  check:
 
     runs-on: ubuntu-latest
 
@@ -45,144 +36,15 @@ jobs:
           echo "Sha: ${{ steps.branch-commits.outputs.sha_short }}"
 
       -
-        name: Create Cache Registry
-        id: cache-docker-images-code
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.IMAGE_CACHE_DIR }}/code
-          key: ${{ runner.os }}-docker-images-${{ steps.branch-commits.outputs.sha_short }}
-
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      -
-        name: Build Docker Image from Source Code
-        if: steps.cache-docker-images-code.outputs.cache-hit != 'true'
+        name: Setup configuration
         run: |
-          docker build \
-            . \
-            --build-arg ARG_RUBY_VERSION=${RUBY_VERSION} \
-            --tag ${{ env.SERVICE_NAME }}/app-ci:latest \
-            -f dockerfiles/Dockerfile-ci
-          mkdir -p ${{ env.IMAGE_CACHE_DIR }}/code
-          docker save --output ${{ env.IMAGE_CACHE_DIR }}/code/image-app.tar ${{ env.SERVICE_NAME }}/app-ci:latest
+          cp -f config/database-ci.yml config/database.yml
+          cp -f config/environments/test-ci.rb config/environments/test.rb
 
       -
-        name: Create Cache Registry For Utilities
-        id: cache-docker-image-utilities
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.IMAGE_CACHE_DIR }}/utilities
-          key: ${{ runner.os }}-docker-images-${{ env.COMPOSE_WAIT_VER }}-${{ hashFiles('dockerfiles/Dockerfile-wait') }}
+        name: Run Tests
+        run: PARALLEL_WORKERS=4 bin/rails test
 
       -
-        name: Build Wait Image
-        if: steps.cache-docker-image-utilities.outputs.cache-hit != 'true'
-        run: |
-          docker build . \
-            --build-arg ARG_COMPOSE_WAIT_VER=${{ env.COMPOSE_WAIT_VER }} \
-            --tag ${{ env.SERVICE_NAME }}/wait:${{ env.COMPOSE_WAIT_VER }} \
-            -f dockerfiles/Dockerfile-wait
-          mkdir -p ${{ env.IMAGE_CACHE_DIR }}/utilities
-          docker save --output ${{ env.IMAGE_CACHE_DIR }}/utilities/image-wait.tar ${{ env.SERVICE_NAME }}/wait:${{ env.COMPOSE_WAIT_VER }}
-
-      -
-        name: Check Cache
-        run: |
-          ls -l ${{ env.IMAGE_CACHE_DIR }}/code
-          ls -l ${{ env.IMAGE_CACHE_DIR }}/utilities
-
-  test:
-
-    needs: image-build-and-cache
-
-    runs-on: ubuntu-latest
-
-    steps:
-
-      -
-        name: Create Network
-        run: docker network create ${{ env.SERVICE_NAME }}-bridge-docker-network
-
-      -
-        name: Create Volumes
-        run: docker volume create ${{ env.SERVICE_NAME }}-data-db
-
-      -
-        name: Start Db
-        run: |
-          docker run --rm --detach \
-            --name ${{ env.SERVICE_NAME }}-db \
-            --env POSTGRES_PASSWORD=${{ env.DB_PASSWORD }} \
-            --env POSTGRES_USER=${{ env.DB_USER }} \
-            --mount source=${{ env.SERVICE_NAME }}-data-db,target=${{ env.DB_DATA_PATH }} \
-            --network=${{ env.SERVICE_NAME }}-bridge-docker-network \
-            postgres:${{ env.DB_VERSION }}
-
-      -
-        name: Declare Cache Registry
-        id: cache-docker-images
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.IMAGE_CACHE_DIR }}/code
-          key: ${{ runner.os }}-docker-images-${{ needs.image-build-and-cache.outputs.sha }}
-
-      -
-        name: Check Cache
-        run: |
-          ls -l ${{ env.IMAGE_CACHE_DIR }}
-
-      -
-        name: Docker load
-        run: |
-          docker load --input ${{ env.IMAGE_CACHE_DIR }}/code/image-app.tar
-
-      -
-        name: Declare Cache Registry For Utilities
-        id: cache-docker-image-utilities
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.IMAGE_CACHE_DIR }}/utilities
-          key: ${{ runner.os }}-docker-images-${{ env.COMPOSE_WAIT_VER }}-${{ hashFiles('dockerfiles/Dockerfile-wait') }}
-
-      -
-        name: Docker load
-        run: |
-          docker load --input ${{ env.IMAGE_CACHE_DIR }}/utilities/image-wait.tar
-
-      -
-        name: Run Wait Container
-        run: |
-          docker run --rm \
-            --env WAIT_HOSTS=${{ env.SERVICE_NAME }}-db:${{ env.DB_PORT }} \
-            --network=${{ env.SERVICE_NAME }}-bridge-docker-network \
-            ${{ env.SERVICE_NAME }}/wait:${{ env.COMPOSE_WAIT_VER }}
-
-      -
-        name: Prepare Env
-        run: |
-          docker run --rm \
-            --env DB_HOST=${{ env.SERVICE_NAME }}-db \
-            --env DB_PORT=${{ env.DB_PORT }} \
-            --env DB_PASSWORD=${{ env.DB_PASSWORD }} \
-            --env DB_USER=${{ env.DB_USER }} \
-            --env RAILS_ENV=test \
-            --network=${{ env.SERVICE_NAME }}-bridge-docker-network \
-            ${{ env.SERVICE_NAME }}/app-ci:${{ env.VERSION }} /bin/bash -c "bin/rails db:prepare"
-
-      -
-        name: Run Test
-        run: |
-          docker run --rm \
-            --env DB_HOST=${{ env.SERVICE_NAME }}-db \
-            --env DB_PORT=${{ env.DB_PORT }} \
-            --env DB_PASSWORD=${{ env.DB_PASSWORD }} \
-            --env DB_USER=${{ env.DB_USER }} \
-            --env RAILS_ENV=test \
-            --network=${{ env.SERVICE_NAME }}-bridge-docker-network \
-            ${{ env.SERVICE_NAME }}/app-ci:${{ env.VERSION }} /bin/bash -c "bin/rails test"
+        name: Run Linter
+        run: bundle exec rubocop --parallel
