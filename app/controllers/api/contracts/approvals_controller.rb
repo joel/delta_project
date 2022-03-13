@@ -6,13 +6,19 @@ module Api
       before_action :set_contract
 
       def update
-        @contract.update(approved_at: Time.now)
-        render json: @contract
+        if @contract.update(approved_at: Time.now)
+          render json: @contract
+        else
+          render :json => { :error => @contract.errors }, status: :unprocessable_entity
+        end
       end
 
       def destroy
-        @contract.update(approved_at: nil)
-        render json: @contract
+        if @contract.update(approved_at: nil)
+          render json: @contract
+        else
+          render :json => { :error => @contract.errors }, status: :unprocessable_entity
+        end
       end
 
       private
