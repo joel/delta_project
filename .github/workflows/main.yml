@@ -37,9 +37,10 @@ jobs:
 
       -
         name: Setup Ruby 3.1.1
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1.1'
+          ruby-version: 3.1.1
+          bundler-cache: true
 
       -
         name: Setup configuration
