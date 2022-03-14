@@ -21,15 +21,15 @@ module Admin
 
     def cancel_button(contract)
       form_tag("/admin/contracts/approvals/#{contract.id}", method: :delete) do
-        button_tag(type: "submit") do
-          content_tag(:strong, "Cancel it!")
+        button_tag(type: "submit", class: "btn btn-danger") do
+          content_tag(:strong, "Reject")
         end
       end
     end
 
     def approve_button(contract)
       form_tag("/admin/contracts/approvals/#{contract.id}", method: :put) do
-        button_tag(type: "submit") do
+        button_tag(type: "submit", class: "btn btn-success") do
           content_tag(:strong, "Approve")
         end
       end

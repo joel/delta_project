@@ -10,4 +10,6 @@ class Contract < ApplicationRecord
   has_one :contract
 
   broadcasts_to :user
+
+  scope :approved, -> { where.not(approved_at: nil) }
 end
