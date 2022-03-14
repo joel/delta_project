@@ -12,4 +12,11 @@ class ContractsMailer < ApplicationMailer
 
     mail to: @user.email, subject: "Contract Approved!"
   end
+
+  def rejected(contract)
+    @contract = contract
+    @user = contract.user
+
+    mail to: @user.email, subject: "Contract Rejected!"
+  end
 end
