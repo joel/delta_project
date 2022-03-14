@@ -9,6 +9,8 @@ class Contract < ApplicationRecord
   belongs_to :user
   has_one :contract
 
+  has_one_attached :document
+
   broadcasts_to :user
 
   scope :approved, -> { where.not(approved_at: nil) }

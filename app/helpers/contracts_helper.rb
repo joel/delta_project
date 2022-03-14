@@ -6,4 +6,10 @@ module ContractsHelper
 
     link_to("New contract", new_user_contract_url(user))
   end
+
+  def document_name(contract)
+    return "N/A" unless contract.document.attached?
+
+    contract.document.filename.to_s
+  end
 end

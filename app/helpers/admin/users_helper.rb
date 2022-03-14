@@ -17,6 +17,12 @@ module Admin
       approve_button(user.contract)
     end
 
+    def document_attached?(contract)
+      return "N/A" unless contract
+
+      contract.document.attached?.to_s
+    end
+
     private
 
     def cancel_button(contract)
