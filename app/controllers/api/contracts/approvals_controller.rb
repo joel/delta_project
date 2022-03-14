@@ -9,7 +9,7 @@ module Api
         if @contract.update(approved_at: Time.now)
           render json: @contract
         else
-          render :json => { :error => @contract.errors }, status: :unprocessable_entity
+          render json: { error: @contract.errors }, status: :unprocessable_entity
         end
       end
 
@@ -17,7 +17,7 @@ module Api
         if @contract.update(approved_at: nil)
           render json: @contract
         else
-          render :json => { :error => @contract.errors }, status: :unprocessable_entity
+          render json: { error: @contract.errors }, status: :unprocessable_entity
         end
       end
 

@@ -27,3 +27,10 @@ user_without_contract:
   email: <%= FFaker::Internet.email %>
   bio: <%= FFaker::Lorem.paragraph %>
   birthday: <%= FFaker::Time.date %>
+
+user_with_contract:
+  first_name: <%= FFaker::Name.first_name %>
+  last_name: <%= FFaker::Name.last_name %>
+  email: <%= FFaker::Internet.email %>
+  bio: <%= FFaker::Lorem.paragraph %>
+  birthday: <%= FFaker::Time.date %>
