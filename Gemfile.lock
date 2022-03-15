@@ -106,6 +106,7 @@ GEM
     importmap-rails (1.0.3)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
+    interactor (3.1.2)
     io-console (0.5.11)
     io-wait (0.2.1)
     irb (1.4.1)
@@ -271,6 +272,7 @@ DEPENDENCIES
   ffaker
   image_processing (~> 1.2)
   importmap-rails
+  interactor
   jbuilder
   puma (~> 5.0)
   rails (~> 7.0.2, >= 7.0.2.2)
