@@ -2,16 +2,16 @@
 
 module Contracts
   class CheckContractValidity
-    include Interactor
+    extend ::LightService::Action
 
-    def call
-      context.fail!(message: "missing document") unless document?
+    expects :contract
+
+    executed do |context|
+      context.fail!("missing document") unless document?(context.contract)
     end
 
-    private
-
-    def document?
-      context.contract.document.attached?
+    def self.document?(contract)
+      contract.document.attached?
     end
   end
 end

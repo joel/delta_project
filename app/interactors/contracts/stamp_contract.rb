@@ -2,9 +2,11 @@
 
 module Contracts
   class StampContract
-    include Interactor
+    extend ::LightService::Action
 
-    def call
+    expects :contract
+
+    executed do |context|
       context.contract.update(approved_at: Time.now)
     end
   end

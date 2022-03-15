@@ -6,7 +6,7 @@ module Admin
       before_action :set_contract
 
       def update
-        result = ::Contracts::ApproveContract.call(contract: @contract, user: @contract.user)
+        result = ::Contracts::ApproveContract.call({ contract: @contract, user: @contract.user })
 
         if result.success?
           flash[:notice] = "Contract approved"

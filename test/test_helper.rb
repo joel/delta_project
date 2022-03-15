@@ -18,6 +18,11 @@ module UserHelper
     user.update(birthday: 20.years.ago)
     user
   end
+
+  def underage!(user)
+    user.update(birthday: 15.years.ago)
+    user
+  end
 end
 
 module ActiveSupport

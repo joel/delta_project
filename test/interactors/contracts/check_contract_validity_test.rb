@@ -8,7 +8,7 @@ module Contracts
       contract = contract_with_document(contracts(:pending_approval))
       adult!(contract.user)
 
-      result = CheckContractValidity.call(contract:)
+      result = CheckContractValidity.execute(contract:)
       assert result.success?
     end
 
@@ -16,7 +16,7 @@ module Contracts
       contract = contracts(:pending_approval)
       adult!(contract.user)
 
-      result = CheckContractValidity.call(contract:)
+      result = CheckContractValidity.execute(contract:)
       assert result.failure?
       assert_equal "missing document", result.message
     end

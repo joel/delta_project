@@ -7,7 +7,7 @@ module Contracts
     test "approved" do
       # Asserts the difference in the ActionMailer::Base.deliveries
       assert_emails 1 do
-        NotifyUser.call(contract: contracts(:approved))
+        NotifyUser.execute(contract: contracts(:approved))
       end
       assert_equal "Contract Approved!", ActionMailer::Base.deliveries.last.subject
     end
@@ -15,7 +15,7 @@ module Contracts
     test "rejected" do
       # Asserts the difference in the ActionMailer::Base.deliveries
       assert_emails 1 do
-        NotifyUser.call(contract: contracts(:pending_approval))
+        NotifyUser.execute(contract: contracts(:pending_approval))
       end
       assert_equal "Contract Rejected!", ActionMailer::Base.deliveries.last.subject
     end

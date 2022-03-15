@@ -8,7 +8,7 @@ module Contracts
       contract = contracts(:pending_approval)
       freeze_time do
         assert_changes -> { contract.approved_at }, from: nil, to: Time.current do
-          result = StampContract.call(contract:)
+          result = StampContract.execute(contract:)
           assert result.success?
         end
       end

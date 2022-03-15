@@ -2,9 +2,11 @@
 
 module Contracts
   class NotifyUser
-    include Interactor
+    extend ::LightService::Action
 
-    def call
+    expects :contract
+
+    executed do |context|
       if context.contract.approved_at
         ContractsMailer.approved(context.contract).deliver_later
       else

@@ -2,16 +2,16 @@
 
 module Contracts
   class CheckUserEligibilty
-    include Interactor
+    extend ::LightService::Action
 
-    def call
-      context.fail!(message: "underage") unless legal_age?
+    expects :user
+
+    executed do |context|
+      context.fail!("underage") unless legal_age?(context.user)
     end
 
-    private
-
-    def legal_age?
-      (Time.now.utc.to_date.year - context.user.birthday.year) > 18
+    def self.legal_age?(user)
+      (Time.now.utc.to_date.year - user.birthday.year) > 18
     end
   end
 end

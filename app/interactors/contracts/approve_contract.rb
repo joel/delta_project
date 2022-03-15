@@ -2,8 +2,19 @@
 
 module Contracts
   class ApproveContract
-    include Interactor::Organizer
+    extend LightService::Organizer
 
-    organize CheckUserEligibilty, CheckContractValidity, StampContract, NotifyUser
+    def self.call(ctx)
+      with(ctx).reduce(actions)
+    end
+
+    def self.actions
+      [
+        CheckUserEligibilty,
+        CheckContractValidity,
+        StampContract,
+        NotifyUser
+      ]
+    end
   end
 end
