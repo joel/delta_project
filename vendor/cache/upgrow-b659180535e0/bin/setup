@@ -1,0 +1,58 @@
+#!/usr/bin/env ruby
+
+# Run as follow:
+# bundle exec bin/setup
+
+require "fileutils"
+require "bundler/setup"
+require "rails"
+require "rails/generators"
+require "rails/generators/rails/app/app_generator"
+
+APP_ROOT = File.expand_path("..", __dir__)
+DUMMY_APP_ROOT = File.expand_path("../test/dummy", __dir__)
+
+params = []
+params << DUMMY_APP_ROOT
+params << "--minimal"
+params << "--force"
+
+def system!(*args)
+  system(*args) || abort("\n== Command #{args} failed ==")
+end
+
+raise "Incompatible Rails Version: [#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]" if Rails::VERSION::MAJOR < 5
+
+FileUtils.chdir APP_ROOT do
+  dummy_app_dir = "./test/dummy"
+  if File.directory?(dummy_app_dir)
+    puts "\n== Remove existing Dummy App =="
+    FileUtils.rm_r(dummy_app_dir, force: true)
+  end
+
+  puts "\n== Add Dummy App Skeleton =="
+  Rails::Generators::AppGenerator.start(params)
+end
+
+FileUtils.chdir APP_ROOT do
+  puts "== Rails version =="
+  puts "Rails [#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]"
+
+  puts "== Copy migration files =="
+  FileUtils.mkdir_p("./test/dummy/db/migrate")
+  Dir.glob("./test/fixtures/dummy_app/db/migrate/*.rb").each do |file_name|
+    text = File.read(file_name)
+    replace = text.gsub!("ActiveRecord::Migration", "ActiveRecord::Migration[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]")
+    File.open("./test/dummy/db/migrate/#{File.basename(file_name)}", "w") { |file| file.write(replace) }
+  end
+
+  puts "== Copy app files =="
+  system!("rsync -av ./test/fixtures/dummy_app/ ./test/dummy/")
+end
+
+FileUtils.chdir DUMMY_APP_ROOT do
+  puts "DUMMY_APP_ROOT: [#{DUMMY_APP_ROOT}]"
+
+  puts "\n== Setup database =="
+  system! "bundle exec rails db:prepare RAILS_ENv=test"
+end

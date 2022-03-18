@@ -6,12 +6,12 @@ module Api
       before_action :set_contract
 
       def update
-        result = ::Contracts::ApproveContract.call(contract: @contract, user: @contract.user)
+        result = ::Contracts::ApproveContract.new.perform(@contract)
 
-        if result.success?
+        if result.errors.none?
           render json: @contract
         else
-          render json: { error: result.message }, status: :unprocessable_entity
+          render json: { error: result.errors[:detail] }, status: :unprocessable_entity
         end
       end
 
