@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
 module Contracts
-  class CheckUserEligibilty < Upgrow::Action
-    result :user
+  class CheckUserEligibilty < Trailblazer::Operation
+    step :validate, fast_track: true
 
-    def perform(user)
-      if legal_age?(user)
-        result.success(user:)
-      else
-        result.failure(detail: "underage")
-      end
+    def validate(options, *)
+      return true if legal_age?(options["user"])
+
+      options["message"] = "underage"
+      false
     end
 
     protected

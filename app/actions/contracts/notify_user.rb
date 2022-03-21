@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 
 module Contracts
-  class NotifyUser < Upgrow::Action
-    result :contract
+  class NotifyUser < Trailblazer::Operation
+    step :notify!
 
-    def perform(contract)
-      if contract.approved_at
-        ContractsMailer.approved(contract).deliver_later
+    def notify!(options, *)
+      if options["contract"].approved_at
+        ContractsMailer.approved(options["contract"]).deliver_later
       else
-        ContractsMailer.rejected(contract).deliver_later
+        ContractsMailer.rejected(options["contract"]).deliver_later
       end
-      result.success(contract:)
     end
   end
 end

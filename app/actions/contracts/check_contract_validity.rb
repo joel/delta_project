@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
 module Contracts
-  class CheckContractValidity < Upgrow::Action
-    result :contract
+  class CheckContractValidity < Trailblazer::Operation
+    step :validate, fast_track: true
 
-    def perform(contract)
-      if document?(contract)
-        result.success(contract:)
-      else
-        result.failure(detail: "missing document")
-      end
+    def validate(options, *)
+      return true if document?(options["contract"])
+
+      options["message"] = "missing document"
+      false
     end
 
     protected

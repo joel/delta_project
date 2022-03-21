@@ -8,9 +8,11 @@ module Contracts
       contract = contract_with_document(contracts(:pending_approval))
       adult!(contract.user)
 
-      result = ApproveContract.new.perform(contract)
-      assert result.errors.none?
-      assert_equal result.user, contract.user
+      ctx = { user: contract.user, contract: }
+      result = ApproveContract.call(ctx)
+      assert result.success?
+      assert_equal result[:user], contract.user
+      assert_equal result[:contract], contract
     end
   end
 end

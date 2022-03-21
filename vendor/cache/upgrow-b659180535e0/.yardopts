@@ -1,6 +1,0 @@
---no-cache
---fail-on-warning
---output-dir
-docs/_site/api
-
-lib/**/*.rb

@@ -1,15 +1,26 @@
 # frozen_string_literal: true
 
 module Contracts
-  class ApproveContract < Upgrow::Action
-    def perform(contract)
-      CheckUserEligibilty.new.perform(contract.user)
-                         .and_then do |user|
-        CheckContractValidity.new.perform(user.contract).and_then do |_contract|
-          StampContract.new.perform(user.contract)
-          NotifyUser.new.perform(user.contract)
-        end
-      end
+  class ApproveContract < Trailblazer::Operation
+    step :validate_user, fast_track: true
+    step :validate_contract, fast_track: true
+    step :notify!
+    step :stamp!
+
+    def validate_user(options, *)
+      CheckUserEligibilty.call(options)
+    end
+
+    def validate_contract(options, *)
+      CheckContractValidity.call(options)
+    end
+
+    def notify!(options, *)
+      NotifyUser.call(options)
+    end
+
+    def stamp!(options, *)
+      StampContract.call(options)
     end
   end
 end

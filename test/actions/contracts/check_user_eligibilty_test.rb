@@ -7,17 +7,25 @@ module Contracts
     test "happy path" do
       user = users(:one)
       adult!(user)
-      result = CheckUserEligibilty.new.perform(user)
-      assert result.errors.none?
-      assert_equal result.user, user
+
+      ctx = { user: }
+
+      result = CheckUserEligibilty.call(ctx)
+
+      assert result.success?
+      assert_equal result[:user], user
     end
 
     test "underage" do
       user = users(:one)
       underage!(user)
-      result = CheckUserEligibilty.new.perform(user)
-      assert result.errors.any?
-      assert_equal "underage", result.errors[:detail]
+
+      ctx = { user: }
+
+      result = CheckUserEligibilty.call(ctx)
+
+      assert result.failure?
+      assert_equal "underage", result[:message]
     end
   end
 end

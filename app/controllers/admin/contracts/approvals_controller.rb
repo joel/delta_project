@@ -6,12 +6,12 @@ module Admin
       before_action :set_contract
 
       def update
-        result = ::Contracts::ApproveContract.new.perform(@contract)
+        result = ::Contracts::ApproveContract.call({ contract: @contract, user: @contract.user })
 
-        if result.errors.none?
+        if result.success?
           flash[:notice] = "Contract approved"
         else
-          flash[:error] = result.errors[:detail]
+          flash[:error] = result[:message]
         end
 
         redirect_to admin_users_path

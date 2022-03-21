@@ -1,11 +1,3 @@
-GIT
-  remote: https://github.com/joel/upgrow
-  revision: b659180535e005bf3b836bc761cda2a750adb734
-  branch: update-rails-version
-  specs:
-    upgrow (0.0.1)
-      activemodel (~> 7.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -106,6 +98,8 @@ GEM
     ffi (1.15.5)
     globalid (1.0.0)
       activesupport (>= 5.0)
+    hashie (5.0.0)
+    hirb (0.7.3)
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
@@ -244,6 +238,22 @@ GEM
     strscan (3.0.1)
     thor (1.2.1)
     timeout (0.2.0)
+    trailblazer-activity (0.13.0)
+      trailblazer-context (~> 0.5.0)
+      trailblazer-option (~> 0.1.0)
+    trailblazer-activity-dsl-linear (0.5.0)
+      trailblazer-activity (>= 0.13.0, < 1.0.0)
+    trailblazer-context (0.5.0)
+      hashie (>= 3.0.0)
+    trailblazer-developer (0.0.23)
+      hirb
+      trailblazer-activity (>= 0.12.2, < 1.0.0)
+      trailblazer-activity-dsl-linear (>= 0.4.1, < 1.0.0)
+    trailblazer-operation (0.7.5)
+      trailblazer-activity (>= 0.12.2, < 1.0.0)
+      trailblazer-activity-dsl-linear (>= 0.4.1, < 1.0.0)
+      trailblazer-developer (>= 0.0.21, < 1.0.0)
+    trailblazer-option (0.1.2)
     turbo-rails (1.0.1)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
@@ -292,9 +302,9 @@ DEPENDENCIES
   sprockets-rails
   sqlite3 (~> 1.4)
   stimulus-rails
+  trailblazer-operation
   turbo-rails
   tzinfo-data
-  upgrow!
   web-console
   webdrivers
 

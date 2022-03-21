@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
 module Contracts
-  class StampContract < Upgrow::Action
-    result :contract
+  class StampContract < Trailblazer::Operation
+    step :stamp!
 
-    def perform(contract)
-      if contract.approved_at
-        result.failure(detail: "contract was already approved!")
+    def stamp!(options, *)
+      if options["contract"].approved_at
+        options["message"] = "contract was already approved!"
+        false
       else
-        contract.update(approved_at: Time.now)
-        result.success(contract:)
+        options["contract"].update(approved_at: Time.now)
+        true
       end
     end
   end
