@@ -2,7 +2,7 @@
 
 module Api
   module Contracts
-    class SignaturesController < ApplicationController
+    class SignaturesController < Api::BaseController
       before_action :set_contract
 
       def update
