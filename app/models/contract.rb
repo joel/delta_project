@@ -14,4 +14,8 @@ class Contract < ApplicationRecord
   broadcasts_to :user
 
   scope :approved, -> { where.not(approved_at: nil) }
+
+  def self.verification_code_valid?(params)
+    params[:verification_code] =~ /^\d{6}$/
+  end
 end
