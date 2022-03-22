@@ -3,15 +3,19 @@
   <tr>
     <th>Name</th>
     <th>Contract Status</th>
+    <th>Signature Status</th>
     <th>Document Sent?</th>
-    <th>Actions</th>
+    <th>Approval</th>
+    <th>Signature</th>
   </tr>
  <% @users.each do |user| %>
   <tr>
     <td><%= user.name %></td>
     <td><%= admin_contract_status(user) %></td>
+    <td><%= admin_contract_signature_status(user) %></td>
     <td><%= document_attached?(user.contract) %></td>
     <td><%= admin_contract_buttons(user) %></td>
+    <td><%= admin_signed_buttons(user) %></td>
   </tr>
   <% end %>
  </table>

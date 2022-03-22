@@ -3,6 +3,7 @@
 Rails.application.routes.draw do
   namespace :admin do
     namespace :contracts do
+      resources :signatures, only: %i[update destroy]
       resources :approvals, only: %i[update destroy]
     end
     resources :users, only: %i[index]
