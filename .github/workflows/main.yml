@@ -50,7 +50,7 @@ jobs:
 
       -
         name: Run Tests
-        run: PARALLEL_WORKERS=4 bin/rails test
+        run: PARALLEL_WORKERS=0 bin/rails test
 
       -
         name: Run Linter
