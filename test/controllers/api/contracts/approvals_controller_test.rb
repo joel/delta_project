@@ -11,7 +11,9 @@ module Api
 
       test "should get approved the contract" do
         freeze_time do
-          patch api_contracts_approval_url(id: contracts(:pending_approval))
+          contract = contract_with_document(contracts(:pending_approval))
+          adult!(contract.user)
+          patch api_contracts_approval_url(id: contract)
           assert_response :success
           assert_equal Time.current, response.parsed_body["approved_at"]
         end

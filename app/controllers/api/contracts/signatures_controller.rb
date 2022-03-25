@@ -6,11 +6,13 @@ module Api
       before_action :set_contract
 
       def update
-        if Contract.verification_code_valid?(verification_code)
-          @contract.update(signed_at: Time.now)
+        input  = ::Contracts::SignatureInput.new(verification_code)
+        result = ::Contracts::SignContract.new.perform(contract: @contract, input:)
+
+        if result.errors.none?
           render json: @contract
         else
-          render json: { error: "bad verification code" }, status: :unprocessable_entity
+          render json: { error: result.errors.messages }, status: :unprocessable_entity
         end
       end
 

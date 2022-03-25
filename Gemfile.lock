@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/joel/upgrow
+  revision: b659180535e005bf3b836bc761cda2a750adb734
+  branch: update-rails-version
+  specs:
+    upgrow (0.0.1)
+      activemodel (~> 7.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -286,6 +294,7 @@ DEPENDENCIES
   stimulus-rails
   turbo-rails
   tzinfo-data
+  upgrow!
   web-console
   webdrivers
 
