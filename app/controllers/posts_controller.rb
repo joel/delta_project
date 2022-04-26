@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+class Repository
+  def save_post(post)
+    post.save
+  end
+end
+
 class PostsController < ApplicationController
   before_action :set_post, only: %i[show edit update destroy]
 
@@ -22,7 +28,7 @@ class PostsController < ApplicationController
   # POST /posts or /posts.json
   def create
     respond_to do |format|
-      CreatePost.new.run(post_params).and_then do |post|
+      CreatePost.new(respository).run(post_params).and_then do |post|
         format.html { redirect_to post_url(post), notice: "Post was successfully created." }
         format.json do
           @post = post
@@ -45,9 +51,17 @@ class PostsController < ApplicationController
   class CreatePost < Upgrow::Action
     result :post
 
+    attr_reader :respository
+
+    def initialize(respository)
+      super()
+
+      @respository = respository
+    end
+
     def run(post_attrs)
       post = Post.new(post_attrs)
-      if post.save
+      if respository.save_post(post)
         result.success(post:)
       else
         result.failure(post.errors)
@@ -88,5 +102,9 @@ class PostsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def post_params
     params.require(:post).permit(:title, :content)
+  end
+
+  def respository
+    @respository ||= Repository.new
   end
 end
