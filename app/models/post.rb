@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Post < ApplicationRecord
-  attribute :title, :string, default: -> { FFaker::Book.title }
+  attribute :title, :string
   attribute :content, :text, default: -> { FFaker::Lorem.paragraph }
 
   validates :title, presence: true

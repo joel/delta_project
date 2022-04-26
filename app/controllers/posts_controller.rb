@@ -21,15 +21,36 @@ class PostsController < ApplicationController
 
   # POST /posts or /posts.json
   def create
-    @post = Post.new(post_params)
-
     respond_to do |format|
-      if @post.save
-        format.html { redirect_to post_url(@post), notice: "Post was successfully created." }
-        format.json { render :show, status: :created, location: @post }
+      CreatePost.new.run(post_params).and_then do |post|
+        format.html { redirect_to post_url(post), notice: "Post was successfully created." }
+        format.json do
+          @post = post
+          render :show, status: :created, location: post
+        end
+      end.or_else do |errors|
+        format.html do
+          @post = Post.new
+          errors.messages.each do |attribute, error|
+            @post.errors.add(attribute, error)
+          end
+
+          render :new, status: :unprocessable_entity
+        end
+        format.json { render json: errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  class CreatePost < Upgrow::Action
+    result :post
+
+    def run(post_attrs)
+      post = Post.new(post_attrs)
+      if post.save
+        result.success(post:)
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
+        result.failure(post.errors)
       end
     end
   end
