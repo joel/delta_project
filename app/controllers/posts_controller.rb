@@ -61,7 +61,7 @@ class PostsController < ApplicationController
     end
 
     def run(post_attrs)
-      post = Post.new(post_attrs)
+      post = Post.new(post_attrs) # Still, Rails, through
       if respository.save_post(post)
         result.success(post:)
       else
