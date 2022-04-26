@@ -48,6 +48,7 @@ class PostsController < ApplicationController
     end
   end
 
+  # Not Rails specific
   class CreatePost < Upgrow::Action
     result :post
 
